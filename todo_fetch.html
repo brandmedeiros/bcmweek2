@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Todo App</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <h1>Todo List</h1>
+
+  <h2 id="status"></h2>
+  <ul id="todos"></ul>
+
+  <script>
+    async function loadTodos() {
+
+      const list = document.getElementById("todos");
+      const status = document.getElementById("status");
+
+      try {
+        const res = await fetch("/todo");
+        const todos = await res.json();
+
+        todos.forEach(toDoList => {
+          const li = document.createElement("li");
+          li.textContent = toDoList.title;
+          li.textContent += toDoList.completed ? " (completed)" : " (not completed)";
+          list.appendChild(li);
+        });
+        status.textContent = `Loaded ${todos.length} todos`;
+      } catch (err) {
+        status.textContent = "Failed to load todos";
+        console.error(err);
+      }
+    }
+
+    loadTodos();
+  </script>
+
+</body>
+</html>
